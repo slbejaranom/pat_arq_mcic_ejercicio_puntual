@@ -55,15 +55,15 @@ public class OrderManager extends JFrame {
     exitButton.addActionListener(new ButtonHandler());
 
     //For layout purposes, put the buttons in a separate panel
-    JPanel buttonPanel = new JPanel();
+    JPanel fieldsPanel = new JPanel();
 
-    JPanel panel = new JPanel();
+    JPanel buttonPanel = new JPanel();
     GridBagLayout gridbag2 = new GridBagLayout();
-    panel.setLayout(gridbag2);
+    buttonPanel.setLayout(gridbag2);
     GridBagConstraints gbc2 = new GridBagConstraints();
-    panel.add(getTotalButton);
-    panel.add(createOrderButton);
-    panel.add(exitButton);
+    buttonPanel.add(getTotalButton);
+    buttonPanel.add(createOrderButton);
+    buttonPanel.add(exitButton);
     gbc2.anchor = GridBagConstraints.EAST;
     gbc2.gridx = 0;
     gbc2.gridy = 0;
@@ -77,11 +77,11 @@ public class OrderManager extends JFrame {
 
     //****************************************************
     GridBagLayout gridbag = new GridBagLayout();
-    buttonPanel.setLayout(gridbag);
+    fieldsPanel.setLayout(gridbag);
     GridBagConstraints gbc = new GridBagConstraints();
 
-    buttonPanel.add(lblOrderType);
-    buttonPanel.add(cmbOrderType);
+    fieldsPanel.add(lblOrderType);
+    fieldsPanel.add(cmbOrderType);
 
     gbc.insets.top = 5;
     gbc.insets.bottom = 5;
@@ -103,8 +103,8 @@ public class OrderManager extends JFrame {
     //Add the buttons and the log to the frame
     Container contentPane = getContentPane();
 
-    contentPane.add(buttonPanel, BorderLayout.NORTH);
-    contentPane.add(panel, BorderLayout.CENTER);
+    contentPane.add(fieldsPanel, BorderLayout.NORTH);
+    contentPane.add(buttonPanel, BorderLayout.CENTER);
     try {
       UIManager.setLookAndFeel(new WindowsLookAndFeel());
       SwingUtilities.updateComponentTreeUI(
