@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
 import javax.swing.*;
 import com.sun.java.swing.plaf.windows.*;
 
@@ -9,6 +10,7 @@ public class OrderManager extends JFrame {
   public static final String GET_TOTAL = "Get Total";
   public static final String CREATE_ORDER = "Create Order";
   public static final String EXIT = "Exit";
+  public static final String REMOVE_LAST_ORDER = "Remove last order";
   public static final String CA_ORDER = "California Order";
   public static final String NON_CA_ORDER =
       "Non-California Order";
@@ -22,6 +24,13 @@ public class OrderManager extends JFrame {
   private JLabel lblOrderType, lblOrderAmount;
   private JLabel lblAdditionalTax, lblAdditionalSH;
   private JLabel lblTotal, lblTotalValue;
+  private JTextArea ordersTextArea;
+
+  public Vector<Order> getOrders() {
+    return orders;
+  }
+
+  private Vector<Order> orders;
 
   public void setUiBuilder(UIBuilder uiBuilder) {
     this.uiBuilder = uiBuilder;
@@ -32,7 +41,7 @@ public class OrderManager extends JFrame {
 
   public OrderManager() {
     super("Ejercicio puntual Patrones y Arquitecturas de Software 2023-1");
-
+    orders = new Vector<>();
     //Create the visitor instance
     objVisitor = new OrderVisitor();
 
@@ -58,12 +67,20 @@ public class OrderManager extends JFrame {
     getTotalButton.setMnemonic(KeyEvent.VK_C);
     JButton exitButton = new JButton(OrderManager.EXIT);
     exitButton.setMnemonic(KeyEvent.VK_X);
-    AllOrders allOrders = new AllOrders();
-    ButtonHandler objButtonHandler = new ButtonHandler(this, allOrders);
+    JButton removeLastOrderButton = new JButton(OrderManager.REMOVE_LAST_ORDER);
+    removeLastOrderButton.setMnemonic(KeyEvent.VK_R);
+    this.ordersTextArea = new JTextArea();
+    this.ordersTextArea.setEditable(false);
+    JScrollPane scroll = new JScrollPane(this.ordersTextArea);
+    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+    ButtonHandler objButtonHandler = new ButtonHandler(this, orders);
 
     getTotalButton.addActionListener(objButtonHandler);
     createOrderButton.addActionListener(objButtonHandler);
     exitButton.addActionListener(new ButtonHandler());
+    removeLastOrderButton.addActionListener(new ButtonHandler(this, orders));
 
     //For layout purposes, put the buttons in a separate panel
     JPanel fieldsPanel = new JPanel();
@@ -74,7 +91,9 @@ public class OrderManager extends JFrame {
     GridBagConstraints gbc2 = new GridBagConstraints();
     buttonPanel.add(getTotalButton);
     buttonPanel.add(createOrderButton);
+    buttonPanel.add(removeLastOrderButton);
     buttonPanel.add(exitButton);
+    buttonPanel.add(scroll);
     gbc2.anchor = GridBagConstraints.EAST;
     gbc2.gridx = 0;
     gbc2.gridy = 0;
@@ -84,7 +103,18 @@ public class OrderManager extends JFrame {
     gridbag2.setConstraints(getTotalButton, gbc2);
     gbc2.gridx = 2;
     gbc2.gridy = 0;
+    gridbag2.setConstraints(removeLastOrderButton, gbc2);
+    gbc2.gridx = 3;
+    gbc2.gridy = 0;
     gridbag2.setConstraints(exitButton, gbc2);
+    gbc2.anchor = GridBagConstraints.WEST;
+    gbc2.gridx = 0;
+    gbc2.gridy = 1;
+    gbc2.fill = GridBagConstraints.BOTH;
+    gbc2.gridwidth = 4;
+    gbc2.weightx = 4;
+    gbc2.weighty = 5;
+    gridbag2.setConstraints(scroll, gbc2);
 
     //****************************************************
     GridBagLayout gridbag = new GridBagLayout();
@@ -126,7 +156,8 @@ public class OrderManager extends JFrame {
 
     //Add the buttons and the log to the frame
     Container contentPane = getContentPane();
-    cmbOrderType.addItemListener(new ItemChangeListener(fieldsPanel, contentPane, OrderManager.this));
+    cmbOrderType.addItemListener(
+        new ItemChangeListener(fieldsPanel, contentPane, OrderManager.this));
     contentPane.add(fieldsPanel, BorderLayout.NORTH);
     this.uiBuilder = new CaliforniaOrderUIBuilder();
     this.uiBuilder.addComponents(fieldsPanel);
@@ -184,12 +215,20 @@ public class OrderManager extends JFrame {
     return txtAdditionalSH.getText();
   }
 
+  public void fillTextAreaWithOrders() {
+    this.ordersTextArea.setText("");
+    AllOrders allOrders = new AllOrders(orders);
+    while (allOrders.hasNext()) {
+      Order order = allOrders.next();
+      this.ordersTextArea.append(order.toString() + "\n");
+    }
+  }
 } // End of class OrderManager
 
 class ButtonHandler implements ActionListener {
 
   OrderManager objOrderManager;
-  private AllOrders allOrders;
+  private Vector<Order> orders;
 
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
@@ -207,16 +246,24 @@ class ButtonHandler implements ActionListener {
 
       // accept the visitor instance
       order.accept(visitor);
-      this.allOrders.addElement(order);
+      objOrderManager.getOrders().addElement(order);
       objOrderManager.setTotalValue(
           " Order Created Successfully");
+      this.objOrderManager.fillTextAreaWithOrders();
     }
-
     if (e.getActionCommand().equals(OrderManager.GET_TOTAL)) {
+      AllOrders allOrders = new AllOrders(orders);
+      AllOrdersTotalDecorator allOrdersTotalDecorator = new AllOrdersTotalDecorator(allOrders);
       totalResult = new Double(
-          allOrders.getBigTotal()).toString();
+          allOrdersTotalDecorator.getBigTotal()).toString();
       totalResult = " Orders Total = " + totalResult;
       objOrderManager.setTotalValue(totalResult);
+    }
+    if (e.getActionCommand().equals(OrderManager.REMOVE_LAST_ORDER)) {
+      if (orders.size() > 0) {
+        this.orders.remove(orders.size() - 1);
+        this.objOrderManager.fillTextAreaWithOrders();
+      }
     }
   }
 
@@ -239,8 +286,8 @@ class ButtonHandler implements ActionListener {
   public ButtonHandler() {
   }
 
-  public ButtonHandler(OrderManager inObjOrderManager, AllOrders allOrders) {
-    this.allOrders = allOrders;
+  public ButtonHandler(OrderManager inObjOrderManager, Vector<Order> orders) {
+    this.orders = orders;
     objOrderManager = inObjOrderManager;
   }
 

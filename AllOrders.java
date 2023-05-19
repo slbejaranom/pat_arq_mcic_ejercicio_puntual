@@ -1,28 +1,26 @@
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
 public class AllOrders implements Iterator<Order> {
 
-  private Vector<Order> orders;
-  Enumeration<Order> ec;
-  Order nextOrder;
+  private final Vector<Order> orders;
+  private int currentIndex = 0;
+  private Order nextOrder;
 
-  public AllOrders() {
-    this.orders = new Vector<>();
+  public AllOrders(Vector orders) {
+    this.orders = orders;
   }
 
   @Override
   public boolean hasNext() {
     boolean matchFound = false;
     nextOrder = null;
-    while (ec.hasMoreElements()) {
-      Order tempObj = ec.nextElement();
-      nextOrder = tempObj;
-      break;
+    if (currentIndex >= this.orders.size()) {
+      return false;
     }
-    return (nextOrder != null);
+    nextOrder = this.orders.get(currentIndex);
+    return true;
   }
 
   @Override
@@ -30,19 +28,24 @@ public class AllOrders implements Iterator<Order> {
     if (nextOrder == null) {
       throw new NoSuchElementException();
     } else {
+      currentIndex++;
       return nextOrder;
     }
   }
 
-  public void addElement(Order order){
-    this.orders.addElement(order);
-  }
-
-  double getBigTotal(){
+  double getBigTotal() {
     double total = 0;
-    for(Order order : orders){
-      total = total + order.getTotal();
+    for (Order order : orders) {
+      total += order.getTotal();
     }
     return total;
+  }
+
+  @Override
+  public void remove() {
+    if (currentIndex > 0) {
+      this.orders.remove(currentIndex - 1);
+      currentIndex--;
+    }
   }
 }

@@ -28,4 +28,8 @@ public class OverseasOrder implements Order {
   public void accept(OrderVisitor v) {
     v.visit(this);
   }
+  @Override
+  public String toString() {
+    return "Overseas Order - Order amount: "+this.getOrderAmount()+" - Additional S&H: "+this.getAdditionalSH()+" -Total: "+this.getTotal();
+  }
 }

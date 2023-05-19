@@ -22,4 +22,9 @@ public class NonCaliforniaOrder implements Order {
   public void accept(OrderVisitor v) {
     v.visit(this);
   }
+
+  @Override
+  public String toString() {
+    return "NonCalifornia Order - Order amount: "+this.getOrderAmount()+" - Total: "+this.getTotal();
+  }
 }
