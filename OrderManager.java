@@ -151,7 +151,6 @@ public class OrderManager extends JFrame {
     this.uiBuilder.addComponents(fieldsPanel);
     contentPane.add(buttonPanel, BorderLayout.CENTER);
     try {
-      UIManager.setLookAndFeel(new WindowsLookAndFeel());
       SwingUtilities.updateComponentTreeUI(
           OrderManager.this);
     } catch (Exception ex) {

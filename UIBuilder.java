@@ -10,8 +10,8 @@ public abstract class UIBuilder {
   void deleteCurrentUI(JPanel jPanel) {
     Component[] components = jPanel.getComponents();
     for (int i = 0; i < components.length; i++) {
-      String componentName = components[i].getName();
-      if (componentName == null) {
+      Component component = components[i];
+      if (component.getName() == null) {
         jPanel.remove(components[i]);
       }
     }

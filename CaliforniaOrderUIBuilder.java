@@ -22,7 +22,6 @@ public class CaliforniaOrderUIBuilder extends UIBuilder {
     panel.add(txtOrderAmount);
     panel.add(lblAdditionalTax);
     panel.add(txtAdditionalTax);
-    GridBagLayout gridbag2 = new GridBagLayout();
     gbc.insets.top = 5;
     gbc.insets.bottom = 5;
     gbc.insets.left = 5;
