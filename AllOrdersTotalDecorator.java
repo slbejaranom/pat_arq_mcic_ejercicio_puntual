@@ -26,4 +26,9 @@ public class AllOrdersTotalDecorator implements Iterator<Order> {
   public Order next() {
     return allOrders.next();
   }
+
+  @Override
+  public void remove() {
+    allOrders.remove();
+  }
 }

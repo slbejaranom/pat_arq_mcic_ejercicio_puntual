@@ -19,23 +19,10 @@ public class OrderManager extends JFrame {
 
 
   private JComboBox cmbOrderType;
-  private JTextField txtOrderAmount, txtAdditionalTax,
-      txtAdditionalSH;
-  private JLabel lblOrderType, lblOrderAmount;
-  private JLabel lblAdditionalTax, lblAdditionalSH;
+  private JLabel lblOrderType;
   private JLabel lblTotal, lblTotalValue;
   private JTextArea ordersTextArea;
-
-  public Vector<Order> getOrders() {
-    return orders;
-  }
-
   private Vector<Order> orders;
-
-  public void setUiBuilder(UIBuilder uiBuilder) {
-    this.uiBuilder = uiBuilder;
-  }
-
   private UIBuilder uiBuilder;
   private OrderVisitor objVisitor;
 
@@ -172,10 +159,6 @@ public class OrderManager extends JFrame {
 
   }
 
-  public Order getOrder() {
-    return this.uiBuilder.getOrder();
-  }
-
   public static void main(String[] args) {
     JFrame frame = new OrderManager();
 
@@ -199,20 +182,16 @@ public class OrderManager extends JFrame {
     return objVisitor;
   }
 
-  public String getOrderType() {
-    return (String) cmbOrderType.getSelectedItem();
+  public Order getOrder() {
+    return this.uiBuilder.getOrder();
   }
 
-  public String getOrderAmount() {
-    return txtOrderAmount.getText();
+  public Vector<Order> getOrders() {
+    return orders;
   }
 
-  public String getTax() {
-    return txtAdditionalTax.getText();
-  }
-
-  public String getSH() {
-    return txtAdditionalSH.getText();
+  public void setUiBuilder(UIBuilder uiBuilder) {
+    this.uiBuilder = uiBuilder;
   }
 
   public void fillTextAreaWithOrders() {
@@ -265,22 +244,6 @@ class ButtonHandler implements ActionListener {
         this.objOrderManager.fillTextAreaWithOrders();
       }
     }
-  }
-
-  public Order createOrder(String orderType,
-      double orderAmount, double tax, double SH) {
-    if (orderType.equalsIgnoreCase(OrderManager.CA_ORDER)) {
-      return new CaliforniaOrder(orderAmount, tax);
-    }
-    if (orderType.equalsIgnoreCase(
-        OrderManager.NON_CA_ORDER)) {
-      return new NonCaliforniaOrder(orderAmount);
-    }
-    if (orderType.equalsIgnoreCase(
-        OrderManager.OVERSEAS_ORDER)) {
-      return new OverseasOrder(orderAmount, SH);
-    }
-    return null;
   }
 
   public ButtonHandler() {

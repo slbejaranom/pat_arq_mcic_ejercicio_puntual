@@ -33,14 +33,6 @@ public class AllOrders implements Iterator<Order> {
     }
   }
 
-  double getBigTotal() {
-    double total = 0;
-    for (Order order : orders) {
-      total += order.getTotal();
-    }
-    return total;
-  }
-
   @Override
   public void remove() {
     if (currentIndex > 0) {
