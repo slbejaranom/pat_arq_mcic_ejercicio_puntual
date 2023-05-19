@@ -28,11 +28,12 @@ public class OrderManager extends JFrame {
   private OrderVisitor objVisitor;
 
   public OrderManager() {
-    super("Visitor Pattern - Example");
+    super("Ejercicio puntual Patrones y Arquitecturas de Software 2023-1");
 
     //Create the visitor instance
     objVisitor = new OrderVisitor();
 
+    lblOrderType = new JLabel("Order Type:");
     cmbOrderType = new JComboBox();
     cmbOrderType.addItem(OrderManager.CA_ORDER);
     cmbOrderType.addItem(OrderManager.NON_CA_ORDER);

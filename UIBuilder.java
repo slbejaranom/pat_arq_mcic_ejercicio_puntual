@@ -1,7 +1,16 @@
 import javax.swing.*;
+import java.awt.*;
 
-public interface UIBuilder {
+public abstract class UIBuilder {
 
-    void addComponents(JPanel panel);
-    Order getOrder();
+    abstract void addComponents(JPanel panel);
+
+    abstract Order getOrder();
+
+    void deleteCurrentUI(JPanel jPanel) {
+        Component[] components = jPanel.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            jPanel.remove(components[i]);
+        }
+    }
 }

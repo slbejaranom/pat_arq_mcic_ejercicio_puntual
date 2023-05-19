@@ -10,6 +10,6 @@ public class UIDirector {
     }
 
     public void build() {
-
+        uiBuilder.addComponents(jPanel);
     }
 }
