@@ -1,27 +1,29 @@
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-public class CaliforniaOrderUIBuilder extends UIBuilder {
+public class OverseasOrderUIBuilder extends UIBuilder{
 
   private JTextField txtOrderAmount;
   private JLabel lblOrderAmount;
-  private JTextField txtAdditionalTax;
-  private JLabel lblAdditionalTax;
-
+  private JTextField txtAdditionalSH;
+  private JLabel lblAdditionalSH;
   @Override
-  public void addComponents(JPanel panel) {
+  void addComponents(JPanel panel) {
     deleteCurrentUI(panel);
     txtOrderAmount = new JTextField(10);
     lblOrderAmount = new JLabel("Order Amount:");
-    txtAdditionalTax = new JTextField(10);
-    lblAdditionalTax = new JLabel("Additional Tax");
+    txtAdditionalSH = new JTextField(10);
+    lblAdditionalSH = new JLabel("Additional S&H");
     GridBagLayout gridbag = new GridBagLayout();
     panel.setLayout(gridbag);
     GridBagConstraints gbc = new GridBagConstraints();
     panel.add(lblOrderAmount);
     panel.add(txtOrderAmount);
-    panel.add(lblAdditionalTax);
-    panel.add(txtAdditionalTax);
+    panel.add(lblAdditionalSH);
+    panel.add(txtAdditionalSH);
     GridBagLayout gridbag2 = new GridBagLayout();
     gbc.insets.top = 5;
     gbc.insets.bottom = 5;
@@ -39,17 +41,17 @@ public class CaliforniaOrderUIBuilder extends UIBuilder {
     gbc.anchor = GridBagConstraints.EAST;
     gbc.gridx = 0;
     gbc.gridy = 2;
-    gridbag.setConstraints(lblAdditionalTax, gbc);
+    gridbag.setConstraints(lblAdditionalSH, gbc);
     gbc.anchor = GridBagConstraints.WEST;
     gbc.gridx = 1;
     gbc.gridy = 2;
-    gridbag.setConstraints(txtAdditionalTax, gbc);
+    gridbag.setConstraints(txtAdditionalSH, gbc);
   }
 
   @Override
-  public Order getOrder() {
+  Order getOrder() {
     double orderAmount = Double.parseDouble(txtOrderAmount.getText());
-    double additionalTax = Double.parseDouble(txtAdditionalTax.getText());
-    return new CaliforniaOrder(orderAmount, additionalTax);
+    double additionalSH = Double.parseDouble(txtAdditionalSH.getText());
+    return new OverseasOrder(orderAmount, additionalSH);
   }
 }

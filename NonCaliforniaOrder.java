@@ -1,5 +1,9 @@
 public class NonCaliforniaOrder implements Order {
   private double orderAmount;
+  private double total;
+  public void setTotal(double total) {
+    this.total = total;
+  }
 
   public NonCaliforniaOrder() {
   }
@@ -9,6 +13,12 @@ public class NonCaliforniaOrder implements Order {
   public double getOrderAmount() {
     return orderAmount;
   }
+
+  @Override
+  public double getTotal() {
+    return this.total;
+  }
+
   public void accept(OrderVisitor v) {
     v.visit(this);
   }

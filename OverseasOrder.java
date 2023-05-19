@@ -1,6 +1,10 @@
 public class OverseasOrder implements Order {
   private double orderAmount;
   private double additionalSH;
+  private double total;
+  public void setTotal(double total) {
+    this.total = total;
+  }
 
   public OverseasOrder() {
   }
@@ -15,6 +19,12 @@ public class OverseasOrder implements Order {
   public double getAdditionalSH() {
     return additionalSH;
   }
+
+  @Override
+  public double getTotal() {
+    return this.total;
+  }
+
   public void accept(OrderVisitor v) {
     v.visit(this);
   }
