@@ -62,13 +62,6 @@ public class OrderManager extends JFrame {
     scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-    ButtonHandler objButtonHandler = new ButtonHandler(this, orders);
-
-    getTotalButton.addActionListener(objButtonHandler);
-    createOrderButton.addActionListener(objButtonHandler);
-    exitButton.addActionListener(new ButtonHandler());
-    removeLastOrderButton.addActionListener(new ButtonHandler(this, orders));
-
     //For layout purposes, put the buttons in a separate panel
     JPanel fieldsPanel = new JPanel();
 
@@ -139,12 +132,20 @@ public class OrderManager extends JFrame {
     gbc.insets.right = 2;
     gbc.insets.top = 40;
 
+    /*EVENTOS*/
+    Container contentPane = getContentPane();
+    ButtonHandler objButtonHandler = new ButtonHandler(this, orders);
+
+    getTotalButton.addActionListener(objButtonHandler);
+    createOrderButton.addActionListener(objButtonHandler);
+    exitButton.addActionListener(new ButtonHandler());
+    removeLastOrderButton.addActionListener(new ButtonHandler(this, orders));
+    cmbOrderType.addItemListener(
+        new ItemChangeListener(fieldsPanel, contentPane, OrderManager.this));
+
     //****************************************************
 
     //Add the buttons and the log to the frame
-    Container contentPane = getContentPane();
-    cmbOrderType.addItemListener(
-        new ItemChangeListener(fieldsPanel, contentPane, OrderManager.this));
     contentPane.add(fieldsPanel, BorderLayout.NORTH);
     this.uiBuilder = new CaliforniaOrderUIBuilder();
     this.uiBuilder.addComponents(fieldsPanel);
@@ -268,7 +269,7 @@ class ItemChangeListener implements ItemListener {
   public void itemStateChanged(ItemEvent e) {
     if (e.getStateChange() == ItemEvent.SELECTED) {
       String selectedOrderType = (String) e.getItem();
-      UIBuilderFactory uiBuilderFactory = new UIBuilderFactory();
+      UIBuilderFactory uiBuilderFactory = new UIBuilderFactoryImpl();
       UIBuilder uiBuilder = uiBuilderFactory.getUIBuilder(selectedOrderType);
       orderManager.setUiBuilder(uiBuilder);
       UIDirector uiDirector = new UIDirector(uiBuilder, this.jPanel);
